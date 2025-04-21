@@ -9,7 +9,7 @@ use App\Models\CampUserRegister;
 class CampController extends Controller
 {
     public function index(){
-        $data['users'] = [];
+        $data['users'] = CampUserRegister::all();
         return view('index',$data);
     }
 
@@ -21,7 +21,7 @@ class CampController extends Controller
     $user = new CampUserRegister();
     $user->user_prefix_id = $req->prefix;
     $user->user_fname = $req->firstname;
-    $user->user_lname = $req->lastname;
+    $user->user_lname = $req->lastname; 
     $user->user_birth_date = $req->birthday;
     $user->user_gender = $req->gender;
     $user->user_bio = $req->bio;
@@ -30,6 +30,12 @@ class CampController extends Controller
 }
     public function delete(Request $req)
     {
-
+        $user = CampUserRegister::find($req->id);
+        if ($user) {
+            $user->delete();
+            return redirect('/')->with('success', 'User deleted successfully');
+        } else {
+            return redirect('/')->with('error', 'User not found');
+        }
     }
 }
