@@ -28,14 +28,36 @@ class CampController extends Controller
     $user->save();
     return redirect('/')->with('success', 'User added successfully');
 }
-    public function delete(Request $req)
+    public function delete($id)
     {
-        $user = CampUserRegister::find($req->id);
+        $user = CampUserRegister::find($id);
         if ($user) {
             $user->delete();
             return redirect('/')->with('success', 'User deleted successfully');
         } else {
             return redirect('/')->with('error', 'User not found');
+        }
+    }
+    public function edit($id)
+{
+    $user = CampUserRegister::find($id);
+    if ($user) {
+        return view('edit', ['user' => $user]);
+    } else {
+        return redirect('/')->with('error', 'ไม่พบผู้ใช้');
+    }
+}
+
+    public function update(Request $req,$id){
+        $user = CampUserRegister::find($id);
+        if($user){
+            $user->update([
+                'user_fname' => $req->user_fname,
+                'user_laname' => $req->user_lname,
+            ]);
+            return view('edit',['user'=>$user]);
+        }else{
+            return redirect('/')->with('error','user not found');
         }
     }
 }

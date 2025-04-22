@@ -26,9 +26,9 @@
             <td>{{ $user->user_gender }}</td>
             <td>{{ $user->user_bio }}</td>
             <td>
-                <a href="{{ url('/edit'.$user->id) }}" class="btn btn-warning">Edit</a>
+            <a href="{{ url( '/edit',$user->id) }}" class="btn btn-warning">Edit</a>
                 <button onclick="confirmDelete({{ $user->id }})" class="btn btn-danger btn-sm">Delete</button>
-                <form id="delete-form-{{ $user->id }}" action="{{ url('/delete'.$user->id) }}" method="POST" style="display: none;">
+                <form id="delete-form-{{ $user->id }}" action="{{ url('/delete/'.$user->id) }}" method="POST" style="display: none;">
                     @csrf
                     @method('DELETE')
                 </form>
@@ -45,33 +45,33 @@
 <script>
     function confirmDelete(id) {
         Swal.fire({
-            title: "แน่ใจหรือไม่?",
-            text: "คุณต้องการลบผู้ใช้นี้จริงหรือ?",
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonColor: "#d33",
-            cancelButtonColor: "#3085d6",
-            confirmButtonText: "ลบเลย",
-            cancelButtonText: "ยกเลิก"
-        }).then((result) => {
-            if (result.isConfirmed) {
-                document.getElementById('delete-form-' + id).submit();
+                title: "แน่ใจหรือไม่?",
+                text: "คุณต้องการลบผู้ใช้นี้จริงหรือ?",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#d33",
+                cancelButtonColor: "#3085d6",
+                confirmButtonText: "ลบเลย",
+                cancelButtonText: "ยกเลิก"
+            }).then((result) => {
+                    if (result.isConfirmed) {
+                        document.getElementById('delete-form-' + id).submit();
+                    }
+                });   
             }
-        });
-    }
+            if(session('status')) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'สำเร็จ',
+                    text: '{{ session('status') }}',
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+            }
 </script>
 
-<!-- แจ้งเตือนหลังลบ -->
-@if (session('success'))
-<script>
-    Swal.fire({
-        icon: 'success',
-        title: '{{ session('success')}}',
-        showConfirmButton: false,
-        timer: 2000
-    });
 </script>
-@endif
+<!-- แจ้งเตือนหลังลบ -->
 @endsection
 
 @section('styles')
